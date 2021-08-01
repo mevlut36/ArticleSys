@@ -30,13 +30,24 @@ class Article {
     }
 
     public function getArticle(int $id){
-        getTitle($id);
-        getDesc($id);
+        if(isset($id)){
+            $sql = "SELECT id, title, descriptionn from article WHERE id = $id";
+            $db = new PDO('mysql:host=localhost;dbname=test', 'root', '');
+            $request = $db->prepare($sql);
+            $request = $db->query($sql);
+            $art = $request->fetch();
+
+            $this->getTitle($art["title"]);
+            $this->getDesc($art["descriptionn"]);
+        } else {
+            echo "error no int";
+        }
+        
     }
 
     public function editArticle(int $id, string $title, string $desc){
         if(isset($_GET['edit']) AND !empty($_GET['edit'])) {
-            public $mode_edition = 1;
+            $mode_edition = 1;
             $edit_article = $bdd->prepare('SELECT * FROM articles WHERE id = ?');
         }
         if(isset($_POST["title"], $_POST["desc"]) && !empty($_POST["title"]) && !empty($_POST["desc"])){
